@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Movies</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #main{
+            width: 80%;
+            margin: auto;
+            /* border: 1px solid red; */
+        }
+        #movies_data{
+            /* width: 100%; */
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 10px;
+        }
+        #movie{
+            width:auto;
+            /* border: 1px solid ; */
+            padding: 5px;
+        }
+        img{
+            width: 100%;
+        }
+        h1{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+       <h1>Popular Movies</h1>
+    <div id="movies_data"></div> 
+    </div>
+</body>
+</html>
+
+<script>
+    //https://image.tmdb.org/t/p/w500//AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg
+    get_data()
+    async function get_data(){
+
+        try{
+        let res = await fetch("https://api.themoviedb.org/4/list/1?api_key=5df7f79d747ba9a6ed81f73950c12c10")
+        let data = await res.json();
+        append(data.results)
+        console.log(data.results);  
+        }
+        
+        catch(err){
+            console.log(err);
+        }
+
+    }
+
+    function append(data){
+
+        let cont = document.getElementById("movies_data");
+        cont.innerHTML = null;
+
+        data.forEach((el)=>{
+
+            let img = document.createElement("img");
+            img.src = `https://image.tmdb.org/t/p/w500/${el.backdrop_path}`;
+
+            let p1 = document.createElement("p");
+            p1.innerText = el.title;
+
+            let p2 = document.createElement("p");
+            p2.innerText = `Released On : ${el.release_date}`;
+
+            let p3 = document.createElement("p");
+            p3.innerText = `Vote : ${el.vote_average*10}%`;
+
+            let div = document.createElement("div");
+            div.setAttribute("id","movie")
+            div.append(img,p1,p2,p3)
+
+            cont.append(div)
+
+        })
+
+    }
+
+
+</script>
